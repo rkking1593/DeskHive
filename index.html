@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deskhive — Unified Customer Support Inbox</title>
+<meta name="description" content="Deskhive brings every customer message — email, chat, social, SMS — into one calm inbox your team can actually keep up with.">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍯</text></svg>"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Deskhive — Unified Customer Support Inbox"/>
+<meta property="og:description" content="Every customer message into one calm inbox. Email, chat, social, and SMS combined."/>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Schema.org SoftwareApplication JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Deskhive",
+  "operatingSystem": "Web Browser",
+  "applicationCategory": "BusinessApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "19.00",
+    "priceCurrency": "USD"
+  },
+  "description": "Unified customer support inbox bringing email, live chat, social, and SMS into one calm queue."
+}
+</script>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark">🍯</span>
+      Deskhive
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#product">Product</a>
+      <a href="#demo">Live Demo</a>
+      <a href="#roi-calculator">ROI Calculator</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="header-actions" id="headerAuthActions">
+      <button class="btn btn-ghost" id="openSignInBtn">Sign in</button>
+      <button class="btn btn-primary" id="openSignUpBtn">Start free trial</button>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow">· Customer support, unified ·</span>
+        <h1>Every customer message.<br><span class="highlight-text">One calm inbox.</span></h1>
+        <p class="hero-sub">Email, live chat, social, and SMS stop scattering across five tabs. Deskhive brings it all into one place your team can actually keep up with.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" id="heroTrialBtn">Start free trial</button>
+          <a href="#demo" class="btn btn-ghost btn-lg">Try live demo ↓</a>
+        </div>
+        <p class="hero-note">✓ No credit card required · 14-day free trial</p>
+      </div>
+
+      <!-- HERO VISUAL / DEMO SIMULATOR -->
+      <div class="hero-visual" id="demo">
+        <div class="demo-controls">
+          <span class="demo-label">Interactive Live Demo</span>
+          <div class="filter-chips">
+            <button class="chip active" data-channel="all">All <span class="badge" id="badgeAll">4</span></button>
+            <button class="chip" data-channel="email">Email <span class="badge">1</span></button>
+            <button class="chip" data-channel="chat">Chat <span class="badge">1</span></button>
+            <button class="chip" data-channel="social">Social <span class="badge">1</span></button>
+            <button class="chip" data-channel="sms">SMS <span class="badge">1</span></button>
+          </div>
+        </div>
+
+        <div class="inbox-card">
+          <div class="inbox-card-header">
+            <span class="inbox-dot"></span>
+            <span>Deskhive Unified Queue</span>
+            <span class="live-status">● Live Updates</span>
+          </div>
+
+          <div class="inbox-rows" id="inboxRowsContainer">
+            <!-- Row 1 -->
+            <div class="inbox-row" data-channel="email" data-id="1">
+              <span class="inbox-source src-email" title="Email">✉</span>
+              <div class="inbox-row-text">
+                <strong>Priya Sharma <span class="channel-tag">Email</span></strong>
+                <span>Refund status inquiry for order #4021</span>
+              </div>
+              <span class="inbox-time">2m ago</span>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="inbox-row" data-channel="chat" data-id="2">
+              <span class="inbox-source src-chat" title="Live Chat">💬</span>
+              <div class="inbox-row-text">
+                <strong>Arjun Mehta <span class="channel-tag">Live Chat</span></strong>
+                <span>Can't log into my dashboard account</span>
+              </div>
+              <span class="inbox-time">6m ago</span>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="inbox-row" data-channel="social" data-id="3">
+              <span class="inbox-source src-social" title="Social DM">🐦</span>
+              <div class="inbox-row-text">
+                <strong>Fatima Khan <span class="channel-tag">Social DM</span></strong>
+                <span>Question regarding Growth Plan discount</span>
+              </div>
+              <span class="inbox-time">14m ago</span>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="inbox-row" data-channel="sms" data-id="4">
+              <span class="inbox-source src-sms" title="SMS">📱</span>
+              <div class="inbox-row-text">
+                <strong>Vikram Roy <span class="channel-tag">SMS</span></strong>
+                <span>Is API integration included in Scale plan?</span>
+              </div>
+              <span class="inbox-time">28m ago</span>
+            </div>
+          </div>
+
+          <!-- TICKET DETAIL PANEL (Interactive Reply Modal) -->
+          <div class="ticket-detail-panel" id="ticketDetailPanel">
+            <div class="panel-header">
+              <button class="back-btn" id="closePanelBtn">← Back to Queue</button>
+              <span class="ticket-id-label" id="panelTicketTitle">Ticket Details</span>
+            </div>
+            <div class="panel-body" id="panelBody">
+              <div class="msg-bubble incoming" id="panelMessage">Select a ticket to reply</div>
+            </div>
+            <div class="panel-reply-box">
+              <input type="text" id="replyInput" placeholder="Type your response to customer..." autocomplete="off">
+              <button class="btn btn-primary btn-sm" id="sendReplyBtn">Send Reply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <section class="trust-bar">
+    <div class="container">
+      <p class="trust-label">Built for support teams at growing modern companies</p>
+      <div class="trust-chips">
+        <span>Northwind Supply Co.</span>
+        <span>Verdant Labs</span>
+        <span>Basecamp Freight</span>
+        <span>Ferry &amp; Finch</span>
+        <span>Apex Digital</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT FEATURES -->
+  <section class="section" id="product">
+    <div class="container">
+      <span class="eyebrow">· What Deskhive does ·</span>
+      <h2>Built around one job: answer faster, together.</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon icon-inbox">📥</div>
+          <h3>Unified inbox</h3>
+          <p>Every channel lands in one queue, sorted by what's waiting longest — not by which app it came from.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-routing">⚡</div>
+          <h3>Smart routing</h3>
+          <p>Conversations go straight to the right teammate based on topic, workload, or who handled it last time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-canned">🎯</div>
+          <h3>Saved replies</h3>
+          <p>Turn your best answers into one-click responses your whole team can reuse and improve over time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-reports">📊</div>
+          <h3>Response reports</h3>
+          <p>See response times and resolution rates by teammate and channel — no spreadsheet exports needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROI CALCULATOR SECTION -->
+  <section class="section section-alt" id="roi-calculator">
+    <div class="container">
+      <div class="roi-wrapper">
+        <div class="roi-text">
+          <span class="eyebrow">· Interactive ROI Calculator ·</span>
+          <h2>Calculate how much time & money Deskhive saves.</h2>
+          <p>See the immediate impact of unifying scattered support tabs into one centralized hive queue.</p>
+        </div>
+
+        <div class="roi-calculator-box">
+          <div class="calculator-controls">
+            <div class="calc-group">
+              <label for="agentsSlider">Support Agents Team Size: <strong id="agentsVal">5 Agents</strong></label>
+              <input type="range" id="agentsSlider" min="1" max="50" value="5" step="1">
+            </div>
+
+            <div class="calc-group">
+              <label for="ticketsSlider">Daily Customer Messages: <strong id="ticketsVal">250 Messages/day</strong></label>
+              <input type="range" id="ticketsSlider" min="50" max="2000" value="250" step="25">
+            </div>
+          </div>
+
+          <div class="calc-results">
+            <div class="result-card">
+              <span class="result-label">Hours Saved / Month</span>
+              <span class="result-value" id="hoursSavedVal">110 hrs</span>
+            </div>
+            <div class="result-card result-highlight">
+              <span class="result-label">Estimated Monthly ROI</span>
+              <span class="result-value" id="roiSavingsVal">$2,750 /mo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <span class="eyebrow">· How it works ·</span>
+      <h2>Three steps from scattered to sorted.</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="step-number">01</span>
+          <h3>Connect your channels</h3>
+          <p>Link your support email, live chat widget, social accounts, and SMS number. Takes about ten minutes.</p>
+        </div>
+        <div class="step">
+          <span class="step-number">02</span>
+          <h3>Messages flow into the hive</h3>
+          <p>Every conversation lands in one shared inbox, tagged by channel and ready to route or reply to.</p>
+        </div>
+        <div class="step">
+          <span class="step-number">03</span>
+          <h3>Respond, together</h3>
+          <p>Your team replies from one place, sees who's handling what, and never double-answers a ticket again.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING SECTION WITH TOGGLE -->
+  <section class="section section-alt" id="pricing">
+    <div class="container">
+      <div class="pricing-header">
+        <span class="eyebrow">· Simple Pricing ·</span>
+        <h2>Transparent plans, no surprise tiers.</h2>
+        
+        <!-- MONTHLY / YEARLY TOGGLE -->
+        <div class="billing-toggle-wrap">
+          <span>Billed Monthly</span>
+          <label class="switch">
+            <input type="checkbox" id="billingToggle">
+            <span class="slider round"></span>
+          </label>
+          <span>Billed Annually <span class="discount-badge">Save 20% + 2 Months Free</span></span>
+        </div>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Starter</h3>
+          <p class="price" id="priceStarter">$19<span class="period">/agent/mo</span></p>
+          <p class="price-sub" id="subStarter">Billed monthly</p>
+          <ul>
+            <li>✓ Unified inbox</li>
+            <li>✓ Email + chat channels</li>
+            <li>✓ Saved replies</li>
+            <li>✓ Basic reporting</li>
+          </ul>
+          <button class="btn btn-ghost btn-block open-auth-btn">Start free trial</button>
+        </div>
+
+        <div class="price-card price-card-featured">
+          <span class="price-badge">Most popular</span>
+          <h3>Growth</h3>
+          <p class="price" id="priceGrowth">$39<span class="period">/agent/mo</span></p>
+          <p class="price-sub" id="subGrowth">Billed monthly</p>
+          <ul>
+            <li>✓ Everything in Starter</li>
+            <li>✓ Social + SMS channels</li>
+            <li>✓ Smart routing</li>
+            <li>✓ Full response reports</li>
+          </ul>
+          <button class="btn btn-primary btn-block open-auth-btn">Start free trial</button>
+        </div>
+
+        <div class="price-card">
+          <h3>Scale</h3>
+          <p class="price">Custom</p>
+          <p class="price-sub">Tailored enterprise plans</p>
+          <ul>
+            <li>✓ Everything in Growth</li>
+            <li>✓ Custom roles &amp; permissions</li>
+            <li>✓ Priority support</li>
+            <li>✓ Dedicated onboarding</li>
+          </ul>
+          <button class="btn btn-ghost btn-block open-auth-btn">Talk to us</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ ACCORDION SECTION -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="faq-header">
+        <span class="eyebrow">· Got Questions? ·</span>
+        <h2>Frequently asked questions</h2>
+      </div>
+
+      <div class="faq-accordion">
+        <div class="faq-item">
+          <button class="faq-trigger">
+            <span>How long does setup take for a support team?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content">
+            <p>Setup takes less than 10 minutes. You can connect existing email inboxes via IMAP/Forwarding, paste our 1-line JS live chat widget, and authenticate your social DMs immediately.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger">
+            <span>Is there a contract or credit card needed for the 14-day trial?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content">
+            <p>No credit card is required to start your 14-day free trial. You get full access to all Growth features during the trial period with zero commitments.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger">
+            <span>Can multiple team members work on the same customer conversation?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content">
+            <p>Yes! Deskhive features real-time collision detection. You can see when a teammate is viewing or typing a response to a ticket so you never double-answer a customer.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-trigger">
+            <span>Does Deskhive work with mobile browsers and apps?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content">
+            <p>Yes, Deskhive's web app is 100% responsive and optimized for desktop, tablet, and mobile web browsers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Bring your support inbox to one calm place.</h2>
+      <button class="btn btn-primary btn-lg open-auth-btn">Start your free trial</button>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark">🍯</span>
+      Deskhive
+    </a>
+    <nav class="footer-links">
+      <a href="#product">Product</a>
+      <a href="#demo">Live Demo</a>
+      <a href="#roi-calculator">ROI Calculator</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <p class="footer-copy">© 2026 Deskhive. Developed by Sarthak Upadhyay.</p>
+  </div>
+</footer>
+
+<!-- FLOATING AUTH MODAL (Sign In / Register with Backdrop Blur) -->
+<div class="modal-overlay" id="authModalOverlay" aria-hidden="true">
+  <div class="modal-card">
+    <button class="modal-close" id="closeModalBtn" aria-label="Close modal">×</button>
+    
+    <div class="modal-header">
+      <div class="modal-tabs">
+        <button class="tab-btn active" id="tabSignIn">Sign In</button>
+        <button class="tab-btn" id="tabRegister">Create Account</button>
+      </div>
+    </div>
+
+    <!-- SIGN IN FORM -->
+    <form class="auth-form active" id="formSignIn">
+      <h3>Welcome back to Deskhive</h3>
+      <p class="auth-sub">Enter your email and password to access your unified inbox.</p>
+      
+      <div class="form-group">
+        <label for="signInEmail">Email Address</label>
+        <input type="email" id="signInEmail" placeholder="name@company.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="signInPass">Password</label>
+        <input type="password" id="signInPass" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Sign In to Dashboard</button>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form class="auth-form" id="formRegister">
+      <h3>Start your 14-day free trial</h3>
+      <p class="auth-sub">No credit card required · Instant setup in 2 minutes.</p>
+      
+      <div class="form-group">
+        <label for="regName">Full Name</label>
+        <input type="text" id="regName" placeholder="Priya Sharma" required>
+      </div>
+
+      <div class="form-group">
+        <label for="regEmail">Work Email</label>
+        <input type="email" id="regEmail" placeholder="priya@company.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="regPass">Create Password</label>
+        <input type="password" id="regPass" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Create Free Account</button>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+<script src="script.js" defer></script>
+</body>
+</html>
