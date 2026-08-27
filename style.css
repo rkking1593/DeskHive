@@ -1047,3 +1047,87 @@ input:checked + .slider:before { transform: translateX(22px); }
   .pricing-grid { grid-template-columns: 1fr; }
   .features-grid { grid-template-columns: 1fr; }
 }
+
+
+/* ==========================================================================
+   MOBILE UI POLISH & CONGESTION FIXES (Billing Toggle, Footer, & Toasts)
+   ========================================================================== */
+
+/* 1. Billing Toggle Mobile Spacing & Layout */
+@media (max-width: 640px) {
+  .billing-toggle-wrap {
+    flex-direction: column;
+    gap: 0.65rem;
+    align-items: center;
+    background: #ffffff;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    max-width: 320px;
+    margin: 1.25rem auto 2rem auto;
+    box-shadow: 0 4px 12px rgba(23, 22, 42, 0.04);
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+  }
+
+  .billing-toggle-wrap span {
+    white-space: nowrap;
+    font-size: 0.88rem;
+  }
+
+  .discount-badge {
+    margin-left: 0;
+    margin-top: 0.2rem;
+    display: inline-block;
+    text-align: center;
+    font-size: 0.75rem;
+  }
+}
+
+/* 2. Footer Links Mobile Layout - Prevent word wrapping */
+.footer-links a {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem 1.25rem;
+    width: 100%;
+  }
+
+  .footer-copy {
+    margin-top: 0.5rem;
+  }
+}
+
+/* 3. Toast Notification Position - Avoid Netlify Badge Overlap */
+@media (max-width: 640px) {
+  .toast-container {
+    top: 5rem;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 340px;
+    align-items: center;
+  }
+
+  .toast {
+    text-align: center;
+    width: 100%;
+  }
+}
