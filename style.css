@@ -1003,3 +1003,47 @@ input:checked + .slider:before { transform: translateX(22px); }
   font-weight: 500;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
+
+
+/* ==========================================================================
+   MOBILE RESPONSIVE & OVERFLOW FIXES (375px - 640px)
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .hero-visual {
+    height: auto;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .inbox-card {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: 320px;
+    margin: 2.25rem auto 1rem auto;
+  }
+
+  .channel-chip {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .chip-email { top: 0%; left: 4%; }
+  .chip-chat { top: 0%; right: 4%; }
+  .chip-social { bottom: -2%; left: 4%; }
+  .chip-sms { bottom: -2%; right: 4%; }
+
+  .calculator-controls { grid-template-columns: 1fr; }
+  .calc-results { grid-template-columns: 1fr; }
+  .roi-wrapper { padding: 1.5rem 1.25rem; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+}

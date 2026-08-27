@@ -321,6 +321,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.getElementById('navLinks');
 
   if (hamburger && navLinks) {
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        hamburger.classList.remove('open');
+      });
+    });
     hamburger.addEventListener('click', () => {
       navLinks.classList.toggle('open');
       hamburger.classList.toggle('open');
