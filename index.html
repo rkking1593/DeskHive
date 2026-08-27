@@ -3,51 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deskhive — Unified Customer Support Inbox</title>
-<meta name="description" content="Deskhive brings every customer message — email, chat, social, SMS — into one calm inbox your team can actually keep up with.">
-
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍯</text></svg>"/>
-<meta property="og:type" content="website"/>
-<meta property="og:title" content="Deskhive — Unified Customer Support Inbox"/>
-<meta property="og:description" content="Every customer message into one calm inbox. Email, chat, social, and SMS combined."/>
-
-<!-- Google Fonts -->
+<title>Deskhive — Customer support, unified.</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍯</text></svg>"/>
+  <meta name="description" content="Deskhive brings every customer message — email, chat, social, SMS — into one calm inbox your team can actually keep up with.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-
-<!-- Schema.org SoftwareApplication JSON-LD -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Deskhive",
-  "operatingSystem": "Web Browser",
-  "applicationCategory": "BusinessApplication",
-  "offers": {
-    "@type": "Offer",
-    "price": "19.00",
-    "priceCurrency": "USD"
-  },
-  "description": "Unified customer support inbox bringing email, live chat, social, and SMS into one calm queue."
-}
-</script>
 </head>
 <body>
 
 <header class="header">
   <div class="container header-inner">
     <a href="#" class="logo">
-      <span class="logo-mark">🍯</span>
+      <span class="logo-mark"></span>
       Deskhive
     </a>
     <nav class="nav-links" id="navLinks">
       <a href="#product">Product</a>
-      <a href="#demo">Live Demo</a>
-      <a href="#roi-calculator">ROI Calculator</a>
       <a href="#how-it-works">How it works</a>
+      <a href="#roi-calculator">ROI Calculator</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -67,89 +42,83 @@
     <div class="container hero-grid">
       <div class="hero-text">
         <span class="eyebrow">· Customer support, unified ·</span>
-        <h1>Every customer message.<br><span class="highlight-text">One calm inbox.</span></h1>
+        <h1>Every customer message.<br>One calm inbox.</h1>
         <p class="hero-sub">Email, live chat, social, and SMS stop scattering across five tabs. Deskhive brings it all into one place your team can actually keep up with.</p>
         <div class="hero-actions">
           <button class="btn btn-primary btn-lg" id="heroTrialBtn">Start free trial</button>
-          <a href="#demo" class="btn btn-ghost btn-lg">Try live demo ↓</a>
+          <a href="#how-it-works" class="btn btn-ghost btn-lg">See how it works</a>
         </div>
-        <p class="hero-note">✓ No credit card required · 14-day free trial</p>
+        <p class="hero-note">No credit card required · 14-day trial</p>
       </div>
 
-      <!-- HERO VISUAL / DEMO SIMULATOR -->
-      <div class="hero-visual" id="demo">
-        <div class="demo-controls">
-          <span class="demo-label">Interactive Live Demo</span>
-          <div class="filter-chips">
-            <button class="chip active" data-channel="all">All <span class="badge" id="badgeAll">4</span></button>
-            <button class="chip" data-channel="email">Email <span class="badge">1</span></button>
-            <button class="chip" data-channel="chat">Chat <span class="badge">1</span></button>
-            <button class="chip" data-channel="social">Social <span class="badge">1</span></button>
-            <button class="chip" data-channel="sms">SMS <span class="badge">1</span></button>
-          </div>
-        </div>
+      <!-- HERO VISUAL WITH ANIMATED & INTERACTIVE FLOATING CHIPS -->
+      <div class="hero-visual" aria-hidden="false">
+        <!-- Clickable & Floating Channel Chips -->
+        <button class="channel-chip chip-email" data-channel="email" title="Click to filter Email messages">Email</button>
+        <button class="channel-chip chip-chat" data-channel="chat" title="Click to filter Live Chat messages">Live Chat</button>
+        <button class="channel-chip chip-social" data-channel="social" title="Click to filter Social messages">Social</button>
+        <button class="channel-chip chip-sms" data-channel="sms" title="Click to filter SMS messages">SMS</button>
 
         <div class="inbox-card">
           <div class="inbox-card-header">
             <span class="inbox-dot"></span>
-            <span>Deskhive Unified Queue</span>
-            <span class="live-status">● Live Updates</span>
+            <span>Deskhive Inbox</span>
           </div>
 
           <div class="inbox-rows" id="inboxRowsContainer">
-            <!-- Row 1 -->
+            <!-- Row 1: Email -->
             <div class="inbox-row" data-channel="email" data-id="1">
-              <span class="inbox-source src-email" title="Email">✉</span>
+              <span class="inbox-source src-email"></span>
               <div class="inbox-row-text">
-                <strong>Priya Sharma <span class="channel-tag">Email</span></strong>
-                <span>Refund status inquiry for order #4021</span>
+                <strong>Priya S.</strong>
+                <span>Refund status on order #4021</span>
               </div>
-              <span class="inbox-time">2m ago</span>
+              <span class="inbox-time">2m</span>
             </div>
 
-            <!-- Row 2 -->
+            <!-- Row 2: Live Chat -->
             <div class="inbox-row" data-channel="chat" data-id="2">
-              <span class="inbox-source src-chat" title="Live Chat">💬</span>
+              <span class="inbox-source src-chat"></span>
               <div class="inbox-row-text">
-                <strong>Arjun Mehta <span class="channel-tag">Live Chat</span></strong>
-                <span>Can't log into my dashboard account</span>
+                <strong>Arjun M.</strong>
+                <span>Can't log into my account</span>
               </div>
-              <span class="inbox-time">6m ago</span>
+              <span class="inbox-time">6m</span>
             </div>
 
-            <!-- Row 3 -->
+            <!-- Row 3: Social -->
             <div class="inbox-row" data-channel="social" data-id="3">
-              <span class="inbox-source src-social" title="Social DM">🐦</span>
+              <span class="inbox-source src-social"></span>
               <div class="inbox-row-text">
-                <strong>Fatima Khan <span class="channel-tag">Social DM</span></strong>
-                <span>Question regarding Growth Plan discount</span>
+                <strong>Fatima K.</strong>
+                <span>Question about the Pro plan</span>
               </div>
-              <span class="inbox-time">14m ago</span>
+              <span class="inbox-time">14m</span>
             </div>
 
-            <!-- Row 4 -->
+            <!-- Row 4: SMS -->
             <div class="inbox-row" data-channel="sms" data-id="4">
-              <span class="inbox-source src-sms" title="SMS">📱</span>
+              <span class="inbox-source src-sms"></span>
               <div class="inbox-row-text">
-                <strong>Vikram Roy <span class="channel-tag">SMS</span></strong>
-                <span>Is API integration included in Scale plan?</span>
+                <strong>Vikram R.</strong>
+                <span>Is API integration included in Scale?</span>
               </div>
-              <span class="inbox-time">28m ago</span>
+              <span class="inbox-time">28m</span>
             </div>
           </div>
 
-          <!-- TICKET DETAIL PANEL (Interactive Reply Modal) -->
+          <!-- Interactive Ticket Detail Drawer Panel -->
           <div class="ticket-detail-panel" id="ticketDetailPanel">
             <div class="panel-header">
-              <button class="back-btn" id="closePanelBtn">← Back to Queue</button>
-              <span class="ticket-id-label" id="panelTicketTitle">Ticket Details</span>
+              <button class="back-btn" id="closePanelBtn">← Back to Inbox</button>
+              <span class="panel-title" id="panelTicketTitle">Ticket Details</span>
             </div>
-            <div class="panel-body" id="panelBody">
-              <div class="msg-bubble incoming" id="panelMessage">Select a ticket to reply</div>
+            <div class="panel-body">
+              <div class="msg-bubble" id="panelMessage">Select a ticket to reply</div>
             </div>
             <div class="panel-reply-box">
-              <input type="text" id="replyInput" placeholder="Type your response to customer..." autocomplete="off">
-              <button class="btn btn-primary btn-sm" id="sendReplyBtn">Send Reply</button>
+              <input type="text" id="replyInput" placeholder="Type response..." autocomplete="off">
+              <button class="btn btn-primary btn-sm" id="sendReplyBtn" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">Send</button>
             </div>
           </div>
         </div>
@@ -160,13 +129,12 @@
   <!-- TRUST BAR -->
   <section class="trust-bar">
     <div class="container">
-      <p class="trust-label">Built for support teams at growing modern companies</p>
+      <p class="trust-label">Built for support teams at growing companies</p>
       <div class="trust-chips">
         <span>Northwind Supply Co.</span>
         <span>Verdant Labs</span>
         <span>Basecamp Freight</span>
         <span>Ferry &amp; Finch</span>
-        <span>Apex Digital</span>
       </div>
     </div>
   </section>
@@ -178,22 +146,22 @@
       <h2>Built around one job: answer faster, together.</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon icon-inbox">📥</div>
+          <div class="feature-icon icon-inbox"></div>
           <h3>Unified inbox</h3>
           <p>Every channel lands in one queue, sorted by what's waiting longest — not by which app it came from.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon icon-routing">⚡</div>
+          <div class="feature-icon icon-routing"></div>
           <h3>Smart routing</h3>
           <p>Conversations go straight to the right teammate based on topic, workload, or who handled it last time.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon icon-canned">🎯</div>
+          <div class="feature-icon icon-canned"></div>
           <h3>Saved replies</h3>
           <p>Turn your best answers into one-click responses your whole team can reuse and improve over time.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon icon-reports">📊</div>
+          <div class="feature-icon icon-reports"></div>
           <h3>Response reports</h3>
           <p>See response times and resolution rates by teammate and channel — no spreadsheet exports needed.</p>
         </div>
@@ -264,22 +232,30 @@
     </div>
   </section>
 
+  <!-- TESTIMONIAL -->
+  <section class="section testimonial-section">
+    <div class="container">
+      <blockquote class="testimonial">
+        <p>"We used to lose track of DMs while everyone was buried in email. Deskhive put it all in one queue, and honestly our team just stopped missing things."</p>
+        <footer>— Head of Support, a Deskhive customer</footer>
+      </blockquote>
+    </div>
+  </section>
+
   <!-- PRICING SECTION WITH TOGGLE -->
   <section class="section section-alt" id="pricing">
     <div class="container">
-      <div class="pricing-header">
-        <span class="eyebrow">· Simple Pricing ·</span>
-        <h2>Transparent plans, no surprise tiers.</h2>
-        
-        <!-- MONTHLY / YEARLY TOGGLE -->
-        <div class="billing-toggle-wrap">
-          <span>Billed Monthly</span>
-          <label class="switch">
-            <input type="checkbox" id="billingToggle">
-            <span class="slider round"></span>
-          </label>
-          <span>Billed Annually <span class="discount-badge">Save 20% + 2 Months Free</span></span>
-        </div>
+      <span class="eyebrow">· Pricing ·</span>
+      <h2>Simple plans, no surprise tiers.</h2>
+
+      <!-- MONTHLY / YEARLY TOGGLE -->
+      <div class="billing-toggle-wrap">
+        <span>Billed Monthly</span>
+        <label class="switch">
+          <input type="checkbox" id="billingToggle">
+          <span class="slider round"></span>
+        </label>
+        <span>Billed Annually <span class="discount-badge">Save 20% + 2 Months Free</span></span>
       </div>
 
       <div class="pricing-grid">
@@ -288,10 +264,10 @@
           <p class="price" id="priceStarter">$19<span class="period">/agent/mo</span></p>
           <p class="price-sub" id="subStarter">Billed monthly</p>
           <ul>
-            <li>✓ Unified inbox</li>
-            <li>✓ Email + chat channels</li>
-            <li>✓ Saved replies</li>
-            <li>✓ Basic reporting</li>
+            <li>Unified inbox</li>
+            <li>Email + chat channels</li>
+            <li>Saved replies</li>
+            <li>Basic reporting</li>
           </ul>
           <button class="btn btn-ghost btn-block open-auth-btn">Start free trial</button>
         </div>
@@ -302,10 +278,10 @@
           <p class="price" id="priceGrowth">$39<span class="period">/agent/mo</span></p>
           <p class="price-sub" id="subGrowth">Billed monthly</p>
           <ul>
-            <li>✓ Everything in Starter</li>
-            <li>✓ Social + SMS channels</li>
-            <li>✓ Smart routing</li>
-            <li>✓ Full response reports</li>
+            <li>Everything in Starter</li>
+            <li>Social + SMS channels</li>
+            <li>Smart routing</li>
+            <li>Full response reports</li>
           </ul>
           <button class="btn btn-primary btn-block open-auth-btn">Start free trial</button>
         </div>
@@ -315,10 +291,10 @@
           <p class="price">Custom</p>
           <p class="price-sub">Tailored enterprise plans</p>
           <ul>
-            <li>✓ Everything in Growth</li>
-            <li>✓ Custom roles &amp; permissions</li>
-            <li>✓ Priority support</li>
-            <li>✓ Dedicated onboarding</li>
+            <li>Everything in Growth</li>
+            <li>Custom roles &amp; permissions</li>
+            <li>Priority support</li>
+            <li>Dedicated onboarding</li>
           </ul>
           <button class="btn btn-ghost btn-block open-auth-btn">Talk to us</button>
         </div>
@@ -329,10 +305,8 @@
   <!-- FAQ ACCORDION SECTION -->
   <section class="section" id="faq">
     <div class="container">
-      <div class="faq-header">
-        <span class="eyebrow">· Got Questions? ·</span>
-        <h2>Frequently asked questions</h2>
-      </div>
+      <span class="eyebrow">· Got Questions? ·</span>
+      <h2>Frequently asked questions</h2>
 
       <div class="faq-accordion">
         <div class="faq-item">
@@ -381,7 +355,7 @@
   <!-- CTA BANNER -->
   <section class="cta-banner">
     <div class="container">
-      <h2>Bring your support inbox to one calm place.</h2>
+      <h2>Bring your support inbox to one place.</h2>
       <button class="btn btn-primary btn-lg open-auth-btn">Start your free trial</button>
     </div>
   </section>
@@ -391,17 +365,17 @@
 <footer class="footer">
   <div class="container footer-inner">
     <a href="#" class="logo">
-      <span class="logo-mark">🍯</span>
+      <span class="logo-mark"></span>
       Deskhive
     </a>
     <nav class="footer-links">
       <a href="#product">Product</a>
-      <a href="#demo">Live Demo</a>
+      <a href="#how-it-works">How it works</a>
       <a href="#roi-calculator">ROI Calculator</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <p class="footer-copy">© 2026 Deskhive. Developed by Sarthak Upadhyay.</p>
+    <p class="footer-copy">© 2026 Deskhive. A concept project.</p>
   </div>
 </footer>
 
@@ -462,9 +436,6 @@
 
 <!-- TOAST NOTIFICATION CONTAINER -->
 <div class="toast-container" id="toastContainer"></div>
-
-<!-- BACK TO TOP BUTTON -->
-<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
 <script src="script.js" defer></script>
 </body>

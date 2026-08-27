@@ -1,11 +1,13 @@
 /* Deskhive — Interactive SaaS Platform Script
-   Handles Auth Modal (LocalStorage), Live Demo Simulator, ROI Calculator, Pricing Toggle, FAQ Accordion, and Toast Alerts. */
+   Featuring 3-Way Floating Chip Interactions:
+   1. Click same chip again -> Toggles/Closes filter & drawer.
+   2. Click outside .hero-visual container -> Resets filter & closes drawer.
+   3. Single-channel isolation -> Shows ONLY matching customer message, hides all others (Transient, resets on refresh).
+*/
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ==========================================
   // 1. TOAST NOTIFICATION SYSTEM
-  // ==========================================
   const toastContainer = document.getElementById('toastContainer');
   function showToast(message) {
     if (!toastContainer) return;
@@ -20,9 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
   }
 
-  // ==========================================
   // 2. AUTH MODAL & LOCALSTORAGE PERSISTENCE
-  // ==========================================
   const authModalOverlay = document.getElementById('authModalOverlay');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const openSignInBtn = document.getElementById('openSignInBtn');
@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const formRegister = document.getElementById('formRegister');
   const headerAuthActions = document.getElementById('headerAuthActions');
 
-  // Open Modal Helper
   function openModal(mode = 'signin') {
     if (!authModalOverlay) return;
     authModalOverlay.classList.add('open');
@@ -48,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Close Modal Helper
   function closeModal() {
     if (!authModalOverlay) return;
     authModalOverlay.classList.remove('open');
@@ -75,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
   openAuthBtns.forEach(btn => btn.addEventListener('click', () => openModal('register')));
   if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
 
-  // Close modal when tapping overlay background
   if (authModalOverlay) {
     authModalOverlay.addEventListener('click', (e) => {
       if (e.target === authModalOverlay) closeModal();
@@ -87,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabRegister.addEventListener('click', () => switchTab('register'));
   }
 
-  // Check LocalStorage for logged in user
   function checkUserSession() {
     const savedUser = localStorage.getItem('deskhive_user');
     if (savedUser && headerAuthActions) {
@@ -108,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Handle Form Sign In Submit
   if (formSignIn) {
     formSignIn.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -121,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Handle Form Register Submit
   if (formRegister) {
     formRegister.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -131,54 +125,98 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('deskhive_user', JSON.stringify(user));
       closeModal();
       checkUserSession();
-      showToast(`Account created successfully! Welcome to Deskhive, ${name}.`);
+      showToast(`Account created successfully! Welcome, ${name}.`);
     });
   }
 
   checkUserSession();
 
-  // ==========================================
-  // 3. INTERACTIVE HERO DEMO SIMULATOR
-  // ==========================================
-  const filterChips = document.querySelectorAll('.filter-chips .chip');
+  // 3. FLOATING CHIPS 3-WAY INTERACTIVITY (TOGGLE, OUTSIDE-CLICK, SINGLE-CHANNEL ISOLATION)
+  const floatingChips = document.querySelectorAll('.channel-chip');
   const inboxRows = document.querySelectorAll('.inbox-row');
+  const heroVisualContainer = document.querySelector('.hero-visual');
   const ticketDetailPanel = document.getElementById('ticketDetailPanel');
   const closePanelBtn = document.getElementById('closePanelBtn');
   const panelTicketTitle = document.getElementById('panelTicketTitle');
   const panelMessage = document.getElementById('panelMessage');
   const replyInput = document.getElementById('replyInput');
   const sendReplyBtn = document.getElementById('sendReplyBtn');
+  let currentActiveChannel = null;
   let currentActiveRow = null;
 
   const ticketData = {
-    "1": { name: "Priya Sharma", channel: "Email", msg: "Hi team, I requested a refund on order #4021 three days ago. Could you please update me on the status?" },
-    "2": { name: "Arjun Mehta", channel: "Live Chat", msg: "I'm getting an 'Invalid Auth Token' error every time I try logging into the dashboard. Help!" },
-    "3": { name: "Fatima Khan", channel: "Social DM", msg: "Hey there! We are a team of 15 support reps. Is there an annual discount available for the Growth plan?" },
-    "4": { name: "Vikram Roy", channel: "SMS", msg: "Is custom Webhook and API integration included in the Scale enterprise tier?" }
+    "1": { name: "Priya S.", channel: "Email", msg: "Refund status on order #4021 requested 3 days ago." },
+    "2": { name: "Arjun M.", channel: "Live Chat", msg: "Can't log into my dashboard account. Invalid Token error." },
+    "3": { name: "Fatima K.", channel: "Social DM", msg: "Question regarding Growth plan annual discount." },
+    "4": { name: "Vikram R.", channel: "SMS", msg: "Is API integration included in Scale enterprise plan?" }
   };
 
-  // Filter Channel Chips
-  filterChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      filterChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
+  // Reset/Show all rows and close panel
+  function resetInboxView() {
+    currentActiveChannel = null;
+    floatingChips.forEach(c => c.classList.remove('active'));
+    inboxRows.forEach(row => {
+      row.style.display = 'flex';
+      row.classList.remove('highlighted');
+    });
+    if (ticketDetailPanel) ticketDetailPanel.classList.remove('active');
+  }
+
+  // Floating Chips Click Handler
+  floatingChips.forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
       const channel = chip.getAttribute('data-channel');
 
+      // REQUIREMENT 1: If same chip clicked again -> TOGGLE / CLOSE IT!
+      if (currentActiveChannel === channel) {
+        resetInboxView();
+        showToast(`Filter cleared — showing all inbox channels.`);
+        return;
+      }
+
+      // REQUIREMENT 3: Show ONLY matching person's message, HIDE all others!
+      currentActiveChannel = channel;
+      floatingChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      let matchedRow = null;
       inboxRows.forEach(row => {
-        if (channel === 'all' || row.getAttribute('data-channel') === channel) {
+        if (row.getAttribute('data-channel') === channel) {
           row.style.display = 'flex';
+          row.classList.add('highlighted');
+          matchedRow = row;
         } else {
-          row.style.display = 'none';
+          row.style.display = 'none'; // Hide all other messages
         }
       });
+
+      if (matchedRow) {
+        const ticketId = matchedRow.getAttribute('data-id');
+        currentActiveRow = matchedRow;
+        const data = ticketData[ticketId];
+        if (data && ticketDetailPanel) {
+          panelTicketTitle.textContent = `${data.name} (${data.channel})`;
+          panelMessage.textContent = `"${data.msg}"`;
+          ticketDetailPanel.classList.add('active');
+        }
+      }
+
+      showToast(`Showing ONLY ${channel.toUpperCase()} message for ${ticketData[matchedRow?.getAttribute('data-id')]?.name || ''}`);
     });
   });
 
-  // Open Ticket Detail
+
+
+  // Clicking Inbox Rows directly
   inboxRows.forEach(row => {
-    row.addEventListener('click', () => {
+    row.addEventListener('click', (e) => {
+      e.stopPropagation();
       const ticketId = row.getAttribute('data-id');
       currentActiveRow = row;
+      inboxRows.forEach(r => r.classList.remove('highlighted'));
+      row.classList.add('highlighted');
+      
       const data = ticketData[ticketId];
       if (data && ticketDetailPanel) {
         panelTicketTitle.textContent = `${data.name} (${data.channel})`;
@@ -189,31 +227,30 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (closePanelBtn && ticketDetailPanel) {
-    closePanelBtn.addEventListener('click', () => {
+    closePanelBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       ticketDetailPanel.classList.remove('active');
     });
   }
 
-  // Send Reply Button
   if (sendReplyBtn && replyInput) {
-    sendReplyBtn.addEventListener('click', () => {
+    sendReplyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const reply = replyInput.value.trim();
       if (!reply) return;
       
-      showToast(`Reply sent successfully to customer! Ticket marked as resolved.`);
+      showToast(`Reply sent to customer! Ticket resolved.`);
       replyInput.value = '';
       if (ticketDetailPanel) ticketDetailPanel.classList.remove('active');
 
       if (currentActiveRow) {
         currentActiveRow.style.opacity = '0.4';
-        currentActiveRow.querySelector('.inbox-time').textContent = '✓ Resolved';
+        currentActiveRow.querySelector('.inbox-time').textContent = '✓';
       }
     });
   }
 
-  // ==========================================
   // 4. INTERACTIVE ROI CALCULATOR
-  // ==========================================
   const agentsSlider = document.getElementById('agentsSlider');
   const ticketsSlider = document.getElementById('ticketsSlider');
   const agentsVal = document.getElementById('agentsVal');
@@ -229,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (agentsVal) agentsVal.textContent = `${agents} Agent${agents > 1 ? 's' : ''}`;
     if (ticketsVal) ticketsVal.textContent = `${tickets} Messages/day`;
 
-    // Calculation logic
     const hoursSaved = Math.round(agents * (tickets * 0.04) * 0.5);
     const monthlyROI = Math.round(hoursSaved * 25);
 
@@ -243,9 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateRoiCalculator();
   }
 
-  // ==========================================
   // 5. MONTHLY / YEARLY PRICING TOGGLE
-  // ==========================================
   const billingToggle = document.getElementById('billingToggle');
   const priceStarter = document.getElementById('priceStarter');
   const priceGrowth = document.getElementById('priceGrowth');
@@ -255,14 +289,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (billingToggle) {
     billingToggle.addEventListener('change', () => {
       if (billingToggle.checked) {
-        // Yearly Prices
         if (priceStarter) priceStarter.innerHTML = `$15<span class="period">/agent/mo</span>`;
         if (priceGrowth) priceGrowth.innerHTML = `$31<span class="period">/agent/mo</span>`;
         if (subStarter) subStarter.textContent = `Billed annually ($180/yr)`;
         if (subGrowth) subGrowth.textContent = `Billed annually ($372/yr)`;
-        showToast(`20% Annual Discount Applied to all plans!`);
+        showToast(`20% Annual Discount Applied!`);
       } else {
-        // Monthly Prices
         if (priceStarter) priceStarter.innerHTML = `$19<span class="period">/agent/mo</span>`;
         if (priceGrowth) priceGrowth.innerHTML = `$39<span class="period">/agent/mo</span>`;
         if (subStarter) subStarter.textContent = `Billed monthly`;
@@ -271,9 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ==========================================
   // 6. FAQ ACCORDION
-  // ==========================================
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(item => {
     const trigger = item.querySelector('.faq-trigger');
@@ -286,9 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ==========================================
-  // 7. HAMBURGER MENU & BACK TO TOP
-  // ==========================================
+  // 7. HAMBURGER MENU
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
 
@@ -298,7 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
       hamburger.classList.toggle('open');
     });
 
-    // Close menu when tapping outside
     document.addEventListener('click', (e) => {
       if (navLinks.classList.contains('open') &&
           !navLinks.contains(e.target) &&
@@ -306,20 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.classList.remove('open');
         hamburger.classList.remove('open');
       }
-    });
-  }
-
-  const backToTopBtn = document.getElementById('backToTop');
-  if (backToTopBtn) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 400) {
-        backToTopBtn.classList.add('visible');
-      } else {
-        backToTopBtn.classList.remove('visible');
-      }
-    });
-    backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
