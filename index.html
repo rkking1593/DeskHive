@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Deskhive — Customer support, unified.</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍯</text></svg>"/>
-  <meta name="description" content="Deskhive brings every customer message — email, chat, social, SMS — into one calm inbox your team can actually keep up with.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍯</text></svg>"/>
+<meta name="description" content="Deskhive brings every customer message — email, chat, social, SMS — into one calm inbox your team can actually keep up with.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+<link rel="stylesheet" href="style.css">
 </head>
 <body id="top">
 
@@ -54,7 +54,6 @@
 
       <!-- HERO VISUAL WITH ANIMATED & INTERACTIVE FLOATING CHIPS -->
       <div class="hero-visual" aria-hidden="false">
-        <!-- Clickable & Floating Channel Chips -->
         <button class="channel-chip chip-email" data-channel="email" title="Click to filter Email messages">Email</button>
         <button class="channel-chip chip-chat" data-channel="chat" title="Click to filter Live Chat messages">Live Chat</button>
         <button class="channel-chip chip-social" data-channel="social" title="Click to filter Social messages">Social</button>
@@ -67,7 +66,6 @@
           </div>
 
           <div class="inbox-rows" id="inboxRowsContainer">
-            <!-- Row 1: Email -->
             <div class="inbox-row" data-channel="email" data-id="1">
               <span class="inbox-source src-email"></span>
               <div class="inbox-row-text">
@@ -77,7 +75,6 @@
               <span class="inbox-time">2m</span>
             </div>
 
-            <!-- Row 2: Live Chat -->
             <div class="inbox-row" data-channel="chat" data-id="2">
               <span class="inbox-source src-chat"></span>
               <div class="inbox-row-text">
@@ -87,7 +84,6 @@
               <span class="inbox-time">6m</span>
             </div>
 
-            <!-- Row 3: Social -->
             <div class="inbox-row" data-channel="social" data-id="3">
               <span class="inbox-source src-social"></span>
               <div class="inbox-row-text">
@@ -97,7 +93,6 @@
               <span class="inbox-time">14m</span>
             </div>
 
-            <!-- Row 4: SMS -->
             <div class="inbox-row" data-channel="sms" data-id="4">
               <span class="inbox-source src-sms"></span>
               <div class="inbox-row-text">
@@ -108,7 +103,6 @@
             </div>
           </div>
 
-          <!-- Interactive Ticket Detail Drawer Panel -->
           <div class="ticket-detail-panel" id="ticketDetailPanel">
             <div class="panel-header">
               <button class="back-btn" id="closePanelBtn">← Back to Inbox</button>
@@ -201,9 +195,9 @@
             <div class="result-card result-highlight">
               <span class="result-label">Estimated Monthly ROI</span>
               <span class="result-value" id="roiSavingsVal">$2,750 /mo</span>
-              <span class="calc-trust-note">*Based on industry avg support agent wage of $25/hr ($4,000/mo)</span>
             </div>
           </div>
+          <p class="calc-assumption-note" id="roiAssumptionNote"></p>
         </div>
       </div>
     </div>
@@ -250,7 +244,6 @@
       <span class="eyebrow">· Pricing ·</span>
       <h2>Simple plans, no surprise tiers.</h2>
 
-      <!-- MONTHLY / YEARLY TOGGLE -->
       <div class="billing-toggle-wrap">
         <div class="toggle-row">
           <span>Billed Monthly</span>
@@ -394,7 +387,7 @@
 <div class="modal-overlay" id="authModalOverlay" aria-hidden="true">
   <div class="modal-card">
     <button class="modal-close" id="closeModalBtn" aria-label="Close modal">×</button>
-    
+
     <div class="modal-header">
       <div class="modal-tabs">
         <button class="tab-btn active" id="tabSignIn">Sign In</button>
@@ -406,7 +399,7 @@
     <form class="auth-form active" id="formSignIn">
       <h3>Welcome back to Deskhive</h3>
       <p class="auth-sub">Enter your email and password to access your unified inbox.</p>
-      
+
       <div class="form-group">
         <label for="signInEmail">Email Address</label>
         <input type="email" id="signInEmail" placeholder="name@company.com" required>
@@ -414,9 +407,11 @@
 
       <div class="form-group">
         <label for="signInPass">Password</label>
-        <div class="input-with-icon">
+        <div class="password-field">
           <input type="password" id="signInPass" placeholder="••••••••" required>
-          <button type="button" class="pass-toggle-btn" data-target="signInPass" aria-label="Toggle password visibility" title="Show/Hide Password">👁️</button>
+          <button type="button" class="pass-toggle-btn" data-target="signInPass" aria-label="Show password">
+            <i class="fa-regular fa-eye"></i>
+          </button>
         </div>
       </div>
 
@@ -427,7 +422,7 @@
     <form class="auth-form" id="formRegister">
       <h3>Start your 14-day free trial</h3>
       <p class="auth-sub">No credit card required · Instant setup in 2 minutes.</p>
-      
+
       <div class="form-group">
         <label for="regName">Full Name</label>
         <input type="text" id="regName" placeholder="Priya Sharma" required>
@@ -440,9 +435,11 @@
 
       <div class="form-group">
         <label for="regPass">Create Password</label>
-        <div class="input-with-icon">
+        <div class="password-field">
           <input type="password" id="regPass" placeholder="••••••••" required>
-          <button type="button" class="pass-toggle-btn" data-target="regPass" aria-label="Toggle password visibility" title="Show/Hide Password">👁️</button>
+          <button type="button" class="pass-toggle-btn" data-target="regPass" aria-label="Show password">
+            <i class="fa-regular fa-eye"></i>
+          </button>
         </div>
       </div>
 

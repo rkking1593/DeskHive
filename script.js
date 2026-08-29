@@ -1,5 +1,7 @@
 /* Deskhive — Interactive SaaS Platform Script
-   Upgraded with Real Multi-User Auth, Password Validation, Mobile Session Avatar & ROI Transparency
+   Real multi-user auth (email + password verification), mobile-visible
+   session state, ROI calculator transparency note, and an icon-based
+   show/hide password toggle docked inside each password field.
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3500);
   }
 
-  // 2. AUTH MODAL & REAL MULTI-USER LOCALSTORAGE AUTH WITH PASSWORD VALIDATION
+  // 2. AUTH MODAL & REAL MULTI-USER LOCALSTORAGE AUTH
   const authModalOverlay = document.getElementById('authModalOverlay');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const openSignInBtn = document.getElementById('openSignInBtn');
@@ -38,15 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const headerAuthActions = document.getElementById('headerAuthActions');
   const navLinks = document.getElementById('navLinks');
 
+  const USERS_KEY = 'deskhive_users';
+  const SESSION_KEY = 'deskhive_active_user';
+
+  function getStoredUsers() {
+    const raw = localStorage.getItem(USERS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+
   function openModal(mode = 'signin') {
     if (!authModalOverlay) return;
     authModalOverlay.classList.add('open');
     authModalOverlay.setAttribute('aria-hidden', 'false');
-    if (mode === 'register') {
-      switchTab('register');
-    } else {
-      switchTab('signin');
-    }
+    switchTab(mode === 'register' ? 'register' : 'signin');
   }
 
   function closeModal() {
@@ -86,22 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
     tabRegister.addEventListener('click', () => switchTab('register'));
   }
 
-  // Get stored users array
-  function getStoredUsers() {
-    const raw = localStorage.getItem('deskhive_users');
-    return raw ? JSON.parse(raw) : [];
-  }
-
-  // Save users array
-  function saveUsers(users) {
-    localStorage.setItem('deskhive_users', JSON.stringify(users));
-  }
-
-  // FIX #2: Check & Render User Session on BOTH Desktop Header AND Mobile Drawer!
+  // Builds the desktop AND mobile "logged in" state, so login is visible
+  // on phones too — not just in the desktop header.
   function checkUserSession() {
-    const activeUserRaw = localStorage.getItem('deskhive_active_user');
-    
-    // Remove existing mobile user chip if present
+    const activeUserRaw = localStorage.getItem(SESSION_KEY);
+
     const existingMobileChip = document.getElementById('mobileUserChip');
     if (existingMobileChip) existingMobileChip.remove();
 
@@ -109,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const activeUser = JSON.parse(activeUserRaw);
       const userName = activeUser.name || activeUser.email.split('@')[0];
 
-      // Desktop Header Chip
       if (headerAuthActions) {
         headerAuthActions.innerHTML = `
           <div class="user-chip">
@@ -117,9 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="signout-btn" id="signOutBtnDesktop">Sign out</button>
           </div>
         `;
+        document.getElementById('signOutBtnDesktop').addEventListener('click', handleSignOut);
       }
 
-      // Mobile Drawer Chip (Inserted at top of navLinks menu)
       if (navLinks) {
         const mobileChipDiv = document.createElement('div');
         mobileChipDiv.className = 'mobile-user-chip';
@@ -129,61 +127,52 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="signout-btn" id="signOutBtnMobile">Sign out</button>
         `;
         navLinks.prepend(mobileChipDiv);
+        document.getElementById('signOutBtnMobile').addEventListener('click', handleSignOut);
       }
-
-      // Sign out handlers
-      const handleSignOut = () => {
-        localStorage.removeItem('deskhive_active_user');
-        location.reload();
-      };
-
-      const btnDesktop = document.getElementById('signOutBtnDesktop');
-      const btnMobile = document.getElementById('signOutBtnMobile');
-      if (btnDesktop) btnDesktop.addEventListener('click', handleSignOut);
-      if (btnMobile) btnMobile.addEventListener('click', handleSignOut);
-
-    } else {
-      // Reset Desktop Header
-      if (headerAuthActions) {
-        headerAuthActions.innerHTML = `
-          <button class="btn btn-ghost" id="openSignInBtn">Sign in</button>
-          <button class="btn btn-primary" id="openSignUpBtn">Start free trial</button>
-        `;
-        document.getElementById('openSignInBtn').addEventListener('click', () => openModal('signin'));
-        document.getElementById('openSignUpBtn').addEventListener('click', () => openModal('register'));
-      }
+    } else if (headerAuthActions) {
+      headerAuthActions.innerHTML = `
+        <button class="btn btn-ghost" id="openSignInBtn">Sign in</button>
+        <button class="btn btn-primary" id="openSignUpBtn">Start free trial</button>
+      `;
+      document.getElementById('openSignInBtn').addEventListener('click', () => openModal('signin'));
+      document.getElementById('openSignUpBtn').addEventListener('click', () => openModal('register'));
     }
   }
 
-  // FIX #1: Sign In with Email & Password Verification
+  function handleSignOut() {
+    localStorage.removeItem(SESSION_KEY);
+    location.reload();
+  }
+
+  // Sign in — checks the email exists AND the password matches it,
+  // with distinct messages for each failure case.
   if (formSignIn) {
     formSignIn.addEventListener('submit', (e) => {
       e.preventDefault();
-      const emailInput = document.getElementById('signInEmail').value.trim().toLowerCase();
-      const passInput = document.getElementById('signInPass').value;
+      const email = document.getElementById('signInEmail').value.trim().toLowerCase();
+      const password = document.getElementById('signInPass').value;
 
       const users = getStoredUsers();
-      const matchedUser = users.find(u => u.email === emailInput);
+      const matchedUser = users.find(u => u.email === email);
 
       if (!matchedUser) {
-        showToast(`No account found with email "${emailInput}". Please create an account first.`, true);
+        showToast(`No account found with email "${email}". Please create an account first.`, true);
         return;
       }
 
-      if (matchedUser.password !== passInput) {
-        showToast(`Incorrect password for ${emailInput}. Please try again.`, true);
+      if (matchedUser.password !== password) {
+        showToast(`Incorrect password for ${email}. Please try again.`, true);
         return;
       }
 
-      // Successful login
-      localStorage.setItem('deskhive_active_user', JSON.stringify(matchedUser));
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ name: matchedUser.name, email: matchedUser.email }));
       closeModal();
       checkUserSession();
       showToast(`Welcome back, ${matchedUser.name}! Connected to Deskhive Inbox.`);
     });
   }
 
-  // FIX #1: Create Account with Multi-User Storage & Duplicate Check
+  // Sign up — stores each account in a list, blocks duplicate emails.
   if (formRegister) {
     formRegister.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -192,49 +181,47 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('regPass').value;
 
       const users = getStoredUsers();
-
-      // Check if user already exists
       const existingUser = users.find(u => u.email === email);
+
       if (existingUser) {
-        showToast(`An account with email "${email}" already exists. Please Sign In.`, true);
+        showToast(`An account with email "${email}" already exists. Please sign in instead.`, true);
         switchTab('signin');
         document.getElementById('signInEmail').value = email;
         return;
       }
 
-      // Add new user to notebook array
-      const newUser = { name: name, email: email, password: password };
-      users.push(newUser);
+      users.push({ name, email, password });
       saveUsers(users);
 
-      // Set active session
-      localStorage.setItem('deskhive_active_user', JSON.stringify(newUser));
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ name, email }));
       closeModal();
       checkUserSession();
       showToast(`Account created successfully! Welcome, ${name}.`);
     });
   }
 
+  checkUserSession();
 
-  // Password Show/Hide Toggle Event Handler
+  // Password show/hide toggle — eye icon docked inside each password field.
   const passToggleBtns = document.querySelectorAll('.pass-toggle-btn');
   passToggleBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = btn.getAttribute('data-target');
       const targetInput = document.getElementById(targetId);
-      if (targetInput) {
-        const isPassword = targetInput.getAttribute('type') === 'password';
-        targetInput.setAttribute('type', isPassword ? 'text' : 'password');
-        btn.textContent = isPassword ? '🙈' : '👁️';
-        btn.setAttribute('title', isPassword ? 'Hide Password' : 'Show Password');
-      }
+      const icon = btn.querySelector('i');
+      if (!targetInput || !icon) return;
+
+      const isPassword = targetInput.getAttribute('type') === 'password';
+      targetInput.setAttribute('type', isPassword ? 'text' : 'password');
+
+      icon.classList.toggle('fa-eye', !isPassword);
+      icon.classList.toggle('fa-eye-slash', isPassword);
+      btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
     });
   });
 
-  checkUserSession();
-
-  // 3. FLOATING CHIPS 3-WAY INTERACTIVITY
+  // 3. FLOATING CHIPS 3-WAY INTERACTIVITY (TOGGLE, SINGLE-CHANNEL ISOLATION)
   const floatingChips = document.querySelectorAll('.channel-chip');
   const inboxRows = document.querySelectorAll('.inbox-row');
   const ticketDetailPanel = document.getElementById('ticketDetailPanel');
@@ -311,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentActiveRow = row;
       inboxRows.forEach(r => r.classList.remove('highlighted'));
       row.classList.add('highlighted');
-      
+
       const data = ticketData[ticketId];
       if (data && ticketDetailPanel) {
         panelTicketTitle.textContent = `${data.name} (${data.channel})`;
@@ -333,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopPropagation();
       const reply = replyInput.value.trim();
       if (!reply) return;
-      
+
       showToast(`Reply sent to customer! Ticket resolved.`);
       replyInput.value = '';
       if (ticketDetailPanel) ticketDetailPanel.classList.remove('active');
@@ -345,13 +332,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. INTERACTIVE ROI CALCULATOR
+  // 4. INTERACTIVE ROI CALCULATOR (with visible assumption note)
   const agentsSlider = document.getElementById('agentsSlider');
   const ticketsSlider = document.getElementById('ticketsSlider');
   const agentsVal = document.getElementById('agentsVal');
   const ticketsVal = document.getElementById('ticketsVal');
   const hoursSavedVal = document.getElementById('hoursSavedVal');
   const roiSavingsVal = document.getElementById('roiSavingsVal');
+  const roiAssumptionNote = document.getElementById('roiAssumptionNote');
+  const HOURLY_RATE_ASSUMPTION = 25;
+
+  if (roiAssumptionNote) {
+    roiAssumptionNote.textContent = `Estimate assumes a support agent's time is worth $${HOURLY_RATE_ASSUMPTION}/hour.`;
+  }
 
   function updateRoiCalculator() {
     if (!agentsSlider || !ticketsSlider) return;
@@ -362,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ticketsVal) ticketsVal.textContent = `${tickets} Messages/day`;
 
     const hoursSaved = Math.round(agents * (tickets * 0.04) * 0.5);
-    const monthlyROI = Math.round(hoursSaved * 25);
+    const monthlyROI = Math.round(hoursSaved * HOURLY_RATE_ASSUMPTION);
 
     if (hoursSavedVal) hoursSavedVal.textContent = `${hoursSaved} hrs/mo`;
     if (roiSavingsVal) roiSavingsVal.textContent = `$${monthlyROI.toLocaleString()} /mo`;
@@ -411,7 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 7. HAMBURGER MENU WITH AUTO CLOSE
+  // 7. HAMBURGER MENU
   const hamburger = document.getElementById('hamburger');
 
   if (hamburger && navLinks) {
