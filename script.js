@@ -1,28 +1,29 @@
 /* Deskhive — Interactive SaaS Platform Script
-   Featuring 3-Way Floating Chip Interactions:
-   1. Click same chip again -> Toggles/Closes filter & drawer.
-   2. Click outside .hero-visual container -> Resets filter & closes drawer.
-   3. Single-channel isolation -> Shows ONLY matching customer message, hides all others (Transient, resets on refresh).
+   Upgraded with Real Multi-User Auth, Password Validation, Mobile Session Avatar & ROI Transparency
 */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. TOAST NOTIFICATION SYSTEM
   const toastContainer = document.getElementById('toastContainer');
-  function showToast(message) {
+  function showToast(message, isError = false) {
     if (!toastContainer) return;
     const toast = document.createElement('div');
     toast.className = 'toast';
+    if (isError) {
+      toast.style.background = '#e11d48';
+      toast.style.color = '#ffffff';
+    }
     toast.textContent = message;
     toastContainer.appendChild(toast);
     setTimeout(() => {
       toast.style.opacity = '0';
       toast.style.transform = 'translateY(10px)';
       setTimeout(() => toast.remove(), 300);
-    }, 3000);
+    }, 3500);
   }
 
-  // 2. AUTH MODAL & LOCALSTORAGE PERSISTENCE
+  // 2. AUTH MODAL & REAL MULTI-USER LOCALSTORAGE AUTH WITH PASSWORD VALIDATION
   const authModalOverlay = document.getElementById('authModalOverlay');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const openSignInBtn = document.getElementById('openSignInBtn');
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const formSignIn = document.getElementById('formSignIn');
   const formRegister = document.getElementById('formRegister');
   const headerAuthActions = document.getElementById('headerAuthActions');
+  const navLinks = document.getElementById('navLinks');
 
   function openModal(mode = 'signin') {
     if (!authModalOverlay) return;
@@ -84,45 +86,129 @@ document.addEventListener('DOMContentLoaded', () => {
     tabRegister.addEventListener('click', () => switchTab('register'));
   }
 
+  // Get stored users array
+  function getStoredUsers() {
+    const raw = localStorage.getItem('deskhive_users');
+    return raw ? JSON.parse(raw) : [];
+  }
+
+  // Save users array
+  function saveUsers(users) {
+    localStorage.setItem('deskhive_users', JSON.stringify(users));
+  }
+
+  // FIX #2: Check & Render User Session on BOTH Desktop Header AND Mobile Drawer!
   function checkUserSession() {
-    const savedUser = localStorage.getItem('deskhive_user');
-    if (savedUser && headerAuthActions) {
-      const user = JSON.parse(savedUser);
-      headerAuthActions.innerHTML = `
-        <div class="user-chip">
-          <span>👋 ${user.name || user.email.split('@')[0]}</span>
-          <button class="signout-btn" id="signOutBtn">Sign out</button>
-        </div>
-      `;
-      const signOutBtn = document.getElementById('signOutBtn');
-      if (signOutBtn) {
-        signOutBtn.addEventListener('click', () => {
-          localStorage.removeItem('deskhive_user');
-          location.reload();
-        });
+    const activeUserRaw = localStorage.getItem('deskhive_active_user');
+    
+    // Remove existing mobile user chip if present
+    const existingMobileChip = document.getElementById('mobileUserChip');
+    if (existingMobileChip) existingMobileChip.remove();
+
+    if (activeUserRaw) {
+      const activeUser = JSON.parse(activeUserRaw);
+      const userName = activeUser.name || activeUser.email.split('@')[0];
+
+      // Desktop Header Chip
+      if (headerAuthActions) {
+        headerAuthActions.innerHTML = `
+          <div class="user-chip">
+            <span>👋 ${userName}</span>
+            <button class="signout-btn" id="signOutBtnDesktop">Sign out</button>
+          </div>
+        `;
+      }
+
+      // Mobile Drawer Chip (Inserted at top of navLinks menu)
+      if (navLinks) {
+        const mobileChipDiv = document.createElement('div');
+        mobileChipDiv.className = 'mobile-user-chip';
+        mobileChipDiv.id = 'mobileUserChip';
+        mobileChipDiv.innerHTML = `
+          <span>👋 ${userName}</span>
+          <button class="signout-btn" id="signOutBtnMobile">Sign out</button>
+        `;
+        navLinks.prepend(mobileChipDiv);
+      }
+
+      // Sign out handlers
+      const handleSignOut = () => {
+        localStorage.removeItem('deskhive_active_user');
+        location.reload();
+      };
+
+      const btnDesktop = document.getElementById('signOutBtnDesktop');
+      const btnMobile = document.getElementById('signOutBtnMobile');
+      if (btnDesktop) btnDesktop.addEventListener('click', handleSignOut);
+      if (btnMobile) btnMobile.addEventListener('click', handleSignOut);
+
+    } else {
+      // Reset Desktop Header
+      if (headerAuthActions) {
+        headerAuthActions.innerHTML = `
+          <button class="btn btn-ghost" id="openSignInBtn">Sign in</button>
+          <button class="btn btn-primary" id="openSignUpBtn">Start free trial</button>
+        `;
+        document.getElementById('openSignInBtn').addEventListener('click', () => openModal('signin'));
+        document.getElementById('openSignUpBtn').addEventListener('click', () => openModal('register'));
       }
     }
   }
 
+  // FIX #1: Sign In with Email & Password Verification
   if (formSignIn) {
     formSignIn.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('signInEmail').value;
-      const user = { email: email, name: email.split('@')[0] };
-      localStorage.setItem('deskhive_user', JSON.stringify(user));
+      const emailInput = document.getElementById('signInEmail').value.trim().toLowerCase();
+      const passInput = document.getElementById('signInPass').value;
+
+      const users = getStoredUsers();
+      const matchedUser = users.find(u => u.email === emailInput);
+
+      if (!matchedUser) {
+        showToast(`No account found with email "${emailInput}". Please create an account first.`, true);
+        return;
+      }
+
+      if (matchedUser.password !== passInput) {
+        showToast(`Incorrect password for ${emailInput}. Please try again.`, true);
+        return;
+      }
+
+      // Successful login
+      localStorage.setItem('deskhive_active_user', JSON.stringify(matchedUser));
       closeModal();
       checkUserSession();
-      showToast(`Welcome back, ${user.name}! Connected to Deskhive Inbox.`);
+      showToast(`Welcome back, ${matchedUser.name}! Connected to Deskhive Inbox.`);
     });
   }
 
+  // FIX #1: Create Account with Multi-User Storage & Duplicate Check
   if (formRegister) {
     formRegister.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = document.getElementById('regName').value;
-      const email = document.getElementById('regEmail').value;
-      const user = { name: name, email: email };
-      localStorage.setItem('deskhive_user', JSON.stringify(user));
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const password = document.getElementById('regPass').value;
+
+      const users = getStoredUsers();
+
+      // Check if user already exists
+      const existingUser = users.find(u => u.email === email);
+      if (existingUser) {
+        showToast(`An account with email "${email}" already exists. Please Sign In.`, true);
+        switchTab('signin');
+        document.getElementById('signInEmail').value = email;
+        return;
+      }
+
+      // Add new user to notebook array
+      const newUser = { name: name, email: email, password: password };
+      users.push(newUser);
+      saveUsers(users);
+
+      // Set active session
+      localStorage.setItem('deskhive_active_user', JSON.stringify(newUser));
       closeModal();
       checkUserSession();
       showToast(`Account created successfully! Welcome, ${name}.`);
@@ -131,10 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   checkUserSession();
 
-  // 3. FLOATING CHIPS 3-WAY INTERACTIVITY (TOGGLE, OUTSIDE-CLICK, SINGLE-CHANNEL ISOLATION)
+  // 3. FLOATING CHIPS 3-WAY INTERACTIVITY
   const floatingChips = document.querySelectorAll('.channel-chip');
   const inboxRows = document.querySelectorAll('.inbox-row');
-  const heroVisualContainer = document.querySelector('.hero-visual');
   const ticketDetailPanel = document.getElementById('ticketDetailPanel');
   const closePanelBtn = document.getElementById('closePanelBtn');
   const panelTicketTitle = document.getElementById('panelTicketTitle');
@@ -151,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
     "4": { name: "Vikram R.", channel: "SMS", msg: "Is API integration included in Scale enterprise plan?" }
   };
 
-  // Reset/Show all rows and close panel
   function resetInboxView() {
     currentActiveChannel = null;
     floatingChips.forEach(c => c.classList.remove('active'));
@@ -162,20 +246,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ticketDetailPanel) ticketDetailPanel.classList.remove('active');
   }
 
-  // Floating Chips Click Handler
   floatingChips.forEach(chip => {
     chip.addEventListener('click', (e) => {
       e.stopPropagation();
       const channel = chip.getAttribute('data-channel');
 
-      // REQUIREMENT 1: If same chip clicked again -> TOGGLE / CLOSE IT!
       if (currentActiveChannel === channel) {
         resetInboxView();
         showToast(`Filter cleared — showing all inbox channels.`);
         return;
       }
 
-      // REQUIREMENT 3: Show ONLY matching person's message, HIDE all others!
       currentActiveChannel = channel;
       floatingChips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
@@ -187,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
           row.classList.add('highlighted');
           matchedRow = row;
         } else {
-          row.style.display = 'none'; // Hide all other messages
+          row.style.display = 'none';
         }
       });
 
@@ -206,9 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-
-
-  // Clicking Inbox Rows directly
   inboxRows.forEach(row => {
     row.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -316,9 +394,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 7. HAMBURGER MENU
+  // 7. HAMBURGER MENU WITH AUTO CLOSE
   const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
 
   if (hamburger && navLinks) {
     navLinks.querySelectorAll('a').forEach(link => {
@@ -327,6 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.classList.remove('open');
       });
     });
+
     hamburger.addEventListener('click', () => {
       navLinks.classList.toggle('open');
       hamburger.classList.toggle('open');

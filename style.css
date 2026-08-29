@@ -1175,3 +1175,41 @@ input:checked + .slider:before { transform: translateX(22px); }
     justify-content: center;
   }
 }
+
+
+/* Fix #3: Transparent ROI Calculator Trust Note */
+.calc-trust-note {
+  font-size: 0.72rem;
+  color: var(--accent);
+  margin-top: 0.35rem;
+  display: block;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Fix #2: Mobile Drawer User Chip Styling */
+.mobile-user-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.mobile-user-chip span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.mobile-user-chip .signout-btn {
+  background: transparent;
+  border: none;
+  color: #e11d48;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
