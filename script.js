@@ -215,6 +215,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
+  // Password Show/Hide Toggle Event Handler
+  const passToggleBtns = document.querySelectorAll('.pass-toggle-btn');
+  passToggleBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = btn.getAttribute('data-target');
+      const targetInput = document.getElementById(targetId);
+      if (targetInput) {
+        const isPassword = targetInput.getAttribute('type') === 'password';
+        targetInput.setAttribute('type', isPassword ? 'text' : 'password');
+        btn.textContent = isPassword ? '🙈' : '👁️';
+        btn.setAttribute('title', isPassword ? 'Hide Password' : 'Show Password');
+      }
+    });
+  });
+
   checkUserSession();
 
   // 3. FLOATING CHIPS 3-WAY INTERACTIVITY

@@ -1208,3 +1208,34 @@ input:checked + .slider:before { transform: translateX(22px); }
   }
 }
 
+
+
+/* Password Show/Hide Toggle Styling */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-with-icon input {
+  padding-right: 2.5rem !important;
+}
+
+.pass-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--muted);
+  opacity: 0.75;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.pass-toggle-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
